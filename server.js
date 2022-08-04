@@ -19,7 +19,7 @@ const randomNum = (min = 2000, max = 10000) => {
 
 const colorBlink = (socket) => {
   socket.emit('message', 'get color');
-  socket.on('message', (message) => {
+  socket.once('message', (message) => {
     switch (message) {
       case 'red':
         return socket.emit('message', 'red yellow');
@@ -32,10 +32,9 @@ const colorBlink = (socket) => {
       case '':
         return socket.emit('message', 'yellow');
       default:
-        socket.on('disconnect', function () {
+        return socket.on('disconnect', function () {
           return socket.disconnect(true);
         });
-        return console.log('wrong color');
     }
   });
 };
@@ -45,7 +44,7 @@ io.on('connection', (socket) => {
 
   timer = setInterval(() => {
     colorBlink(socket);
-  }, randomNum());
+  }, 1000);
 
   socket.on('disconnect', function () {
     console.log('A user disconnected');
