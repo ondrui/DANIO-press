@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
 
   timer = setInterval(() => {
     colorBlink(socket);
-  }, 1000);
+  }, randomNum());
 
   socket.on('disconnect', function () {
     console.log('A user disconnected');
