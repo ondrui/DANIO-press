@@ -1,15 +1,21 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const port = 3000;
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.use(cors());
 app.use(express.static(__dirname + '/'));
 
 const randomNum = (min = 2000, max = 10000) => {
