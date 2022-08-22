@@ -5,18 +5,15 @@ const port = 3000;
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
+const handlerColor = require('./handlerColor');
+
 const io = new Server(server, {
   cors: {
     origin: '*',
   },
 });
 
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html');
-// });
-
 app.use(cors());
-app.use(express.static(__dirname + '/'));
 
 const randomNum = (min = 2000, max = 10000) => {
   const random = Math.random() * (max - min) + min;
@@ -26,22 +23,7 @@ const randomNum = (min = 2000, max = 10000) => {
 const colorBlink = (socket) => {
   socket.emit('message', 'get color');
   socket.once('message', (message) => {
-    switch (message) {
-      case 'red':
-        return socket.emit('message', 'red yellow');
-      case 'red yellow':
-        return socket.emit('message', 'green');
-      case 'green':
-        return socket.emit('message', 'yellow');
-      case 'yellow':
-        return socket.emit('message', 'red');
-      case '':
-        return socket.emit('message', 'yellow');
-      default:
-        return socket.on('disconnect', function () {
-          return socket.disconnect(true);
-        });
-    }
+    socket.emit('message', handlerColor(message));
   });
 };
 
