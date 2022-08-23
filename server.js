@@ -5,7 +5,7 @@ const port = 3000;
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const handlerColor = require('./handlerColor');
+const handlerColor = require('./handlers/handlerColor');
 
 const io = new Server(server, {
   cors: {
