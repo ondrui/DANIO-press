@@ -4,8 +4,8 @@ const cors = require('cors');
 const port = 3000;
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
-const handlerColor = require('./handlers/handlerColor');
+const { Server, Socket } = require('socket.io');
+const handler = require('./handlers/handlerColor');
 
 const io = new Server(server, {
   cors: {
@@ -15,22 +15,27 @@ const io = new Server(server, {
 
 app.use(cors());
 
-const randomNum = (min = 2000, max = 10000) => {
+const randomNum = (min = 2000, max = 10000): number => {
   const random = Math.random() * (max - min) + min;
-  return random.toFixed();
+  return +random.toFixed();
 };
 
-const colorBlink = (socket) => {
+/**
+ * This function connect to client
+ * @param {Object} socket
+ * @param {Number} message
+ */
+const colorBlink = (socket: typeof Socket) => {
   socket.emit('message', 'get color');
-  socket.once('message', (message) => {
-    socket.emit('message', handlerColor(message));
+  socket.once('message', (message: string | number) => {
+    socket.emit('message', handler(message));
   });
 };
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: typeof Socket) => {
   console.log('connection ok');
 
-  timer = setInterval(() => {
+  const timer = setInterval(() => {
     colorBlink(socket);
   }, randomNum());
 
