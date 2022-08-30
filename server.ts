@@ -1,15 +1,15 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const port = 3000;
-const http = require('http');
-const server = http.createServer(app);
-const { Server, Socket } = require('socket.io');
-const handler = require('./handlers/handlerColor');
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
+import handlerColor from './handlers/handlerColor';
 
+const port = 3000;
+const app = express();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+      origin: '*',
   },
 });
 
@@ -25,14 +25,14 @@ const randomNum = (min = 2000, max = 10000): number => {
  * @param {Object} socket
  * @param {Number} message
  */
-const colorBlink = (socket: typeof Socket) => {
+const colorBlink = (socket: Socket) => {
   socket.emit('message', 'get color');
-  socket.once('message', (message: string | number) => {
-    socket.emit('message', handler(message));
+  socket.once('message', (message) => {
+    socket.emit('message', handlerColor(message));
   });
 };
 
-io.on('connection', (socket: typeof Socket) => {
+io.on('connection', (socket: Socket) => {
   console.log('connection ok');
 
   const timer = setInterval(() => {

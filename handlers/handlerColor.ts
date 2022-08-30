@@ -1,20 +1,19 @@
-const switchCode = require('./switchCodeColor');
+import { switchCodeColor } from "./switchCodeColor";
 /**
  * This function get code from server and return new state
  * @param {Number} code
  * @returns {String}
  */
-const handlerColor = (code: number): string => {
+const handlerColor = (code: number) => {
   console.log('code', code);
   if (!code) {
-    return `${switchCode[1]}`;
+    return `${switchCodeColor[1]}`;
   }
-  if (switchCode[code] !== undefined) {
-    return `${switchCode[code]}`;
+  if (switchCodeColor[code] !== undefined) {
+    return `${switchCodeColor[code]}`;
   } else {
-    return `${switchCode[1]}`;
+    return `${switchCodeColor[1]}`;
   }
-
 };
 
-module.exports = handlerColor;
+export default handlerColor;
